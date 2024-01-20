@@ -49,33 +49,56 @@
 
 ; Exercise 2.15
 
-(define checkerboard
-  (lambda (image w h)
-    (checkerboarder image w h w h)))
+; the first approach, which was *not* great. here because why not
+
+;(define checkerboard
+;  (lambda (image w h)
+;    (checkerboarder image w h w h)))
 
 ; checkerboarder is the helper function
 
-(define checkerboarder
-  (lambda (image w h original-w original-h)
-    (if (> h 0)
-        (if (> w 0)
-            (checkerboarder (invert-and-write image) (- w 1) h original-w original-h)
-            (checkerboarder (newline-and-write image) original-w (- h 1) original-w original-h)
-        ))
-    ))
+;(define checkerboarder
+;  (lambda (image w h original-w original-h)
+;    (if (> h 0)
+;        (if (> w 0)
+;            (checkerboarder (invert-and-write image) (- w 1) h original-w original-h)
+;            (checkerboarder (newline-and-write image) original-w (- h 1) original-w original-h)
+;        ))
+;    ))
+;
+;(define invert-and-write
+;  (lambda (image)
+;    (write image)
+;    (invert image)))
+;
+;(define newline-and-write
+;  (lambda (image)
+;    (newline)
+;    image
+;    ))
 
-(define invert-and-write
-  (lambda (image)
-    (write image)
-    (invert image)))
+; actually trying now
 
-(define newline-and-write
-  (lambda (image)
-    (newline)
-    image
-    ))
+; checkerboard-v2 makes a stack of images
 
-; this is such a terrible solution.
+(define checkerboard-v2
+  (lambda (image w h)
+    (if (and (> w 0) (> h 1))
+        (stack image (checkerboard-v2 (invert image) w (- h 1)))
+        image)))
+
+; checkerboard *should* put the stacked images from v2 side-by-side
+
+(define checkerboard
+  (lambda (image w h)
+    (if (> w 1)
+        (side-by-side
+         (checkerboard-v2 image w h)
+         (checkerboard (invert image) (- w 1) h))
+        (checkerboard-v2 image w h))))
+
+; SDHJFKJOHGBIOPKL:SRFHIOPWHFKJSDHGVJKLSHJRFIOPWEHGJKLBDHFJKLAS
+; this took *waaaaaaaaaaaay* too long
 
 
 ; Assignment 1, so everything works. I had to update how side-by-side works from my original
