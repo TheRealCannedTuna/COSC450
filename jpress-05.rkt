@@ -45,10 +45,12 @@
         '()
         (cons ((car fn-list) n) (apply-all (cdr fn-list) n)))))
 
-(define square
-  (lambda (x)
-    (* x x)))
+; Functions used to test the example given in 7.42
 
-(define cube
-  (lambda (x)
-    (* x (square x))))
+;(define square
+;  (lambda (x)
+;    (* x x)))
+;
+;(define cube
+;  (lambda (x)
+;    (* x (square x))))
